@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Password Rules</title>
+  </head>
+  <body>
+    <main>
+      <h1>Password Rules</h1>
+      <section class="card">
+        <label>Password <input type="password" id="password" autocomplete="off" /></label>
+        <label class="muted"><input type="checkbox" id="show" /> show</label>
+        <p id="verdict" class="verdict">(if you can read this, dist/app.js has not run - build the project)</p>
+        <ul id="checklist" class="checklist"></ul>
+      </section>
+      <p class="muted">Nothing you type leaves this page.</p>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

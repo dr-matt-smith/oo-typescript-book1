@@ -1,0 +1,10 @@
+[
+  { "name": "Mercury", "fact": "the smallest planet, and the closest to the Sun" },
+  { "name": "Venus", "fact": "the hottest planet, hidden under thick clouds" },
+  { "name": "Earth", "fact": "the only planet known to have life" },
+  { "name": "Mars", "fact": "red because of rust in its soil" },
+  { "name": "Jupiter", "fact": "the biggest planet - over 1,000 Earths would fit inside" },
+  { "name": "Saturn", "fact": "famous for its bright rings of ice and rock" },
+  { "name": "Uranus", "fact": "spins on its side" },
+  { "name": "Neptune", "fact": "the windiest planet, and the furthest from the Sun" }
+]

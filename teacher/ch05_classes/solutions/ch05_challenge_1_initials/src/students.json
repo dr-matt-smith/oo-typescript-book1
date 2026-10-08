@@ -1,0 +1,8 @@
+[
+  { "id": 101, "firstName": "Ada", "surname": "Lovelace", "course": "Computing", "nickname": "Countess" },
+  { "id": 102, "firstName": "Alan", "surname": "Turing", "course": "Mathematics" },
+  { "id": 103, "firstName": "Grace", "surname": "Hopper", "course": "Computing", "nickname": "Amazing Grace" },
+  { "id": 104, "firstName": "Tim", "surname": "Berners-Lee", "course": "Physics" },
+  { "id": 105, "firstName": "Margaret", "surname": "Hamilton" },
+  { "id": 106, "firstName": "Linus", "surname": "Torvalds", "course": "Computing" }
+]

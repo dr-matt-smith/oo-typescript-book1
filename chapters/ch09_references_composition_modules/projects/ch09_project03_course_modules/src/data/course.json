@@ -1,0 +1,18 @@
+{
+  "name": "BSc in Computing, Year 2",
+  "students": [
+    { "id": "C001", "name": "Aoife Byrne" },
+    { "id": "C002", "name": "Ben Okafor" },
+    { "id": "C003", "name": "Chloe Martin" },
+    { "id": "C004", "name": "Darius Nowak" },
+    { "id": "C005", "name": "Ella Fitzgerald" },
+    { "id": "C006", "name": "Finn Walsh" },
+    { "id": "C007", "name": "Grace Liu" }
+  ],
+  "modules": [
+    { "code": "OOP2", "title": "Object-oriented Programming 2", "credits": 10, "studentIds": ["C001", "C002", "C003", "C005"] },
+    { "code": "WEB2", "title": "Web Development 2", "credits": 5, "studentIds": ["C001", "C004", "C006"] },
+    { "code": "DB1", "title": "Databases 1", "credits": 5, "studentIds": ["C002", "C003", "C004", "C007"] },
+    { "code": "MATH2", "title": "Discrete Mathematics", "credits": 5, "studentIds": ["C005", "C006"] }
+  ]
+}

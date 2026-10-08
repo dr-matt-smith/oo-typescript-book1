@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 360" width="780" height="360" font-family="Arial, sans-serif">
+  <rect width="780" height="360" fill="#ffffff"/>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d3557"/>
+    </marker>
+  </defs>
+  <text x="390" y="28" font-size="15" fill="#1b1f2a" text-anchor="middle">The browser's event loop: one event at a time</text>
+  <g font-size="13" fill="#1b1f2a" text-anchor="middle">
+    <!-- sources -->
+    <rect x="20" y="60" width="130" height="40" rx="8" fill="#f1faee" stroke="#457b9d"/><text x="85" y="85">a mouse click</text>
+    <rect x="20" y="115" width="130" height="40" rx="8" fill="#f1faee" stroke="#457b9d"/><text x="85" y="140">a key press</text>
+    <rect x="20" y="170" width="130" height="40" rx="8" fill="#f1faee" stroke="#457b9d"/><text x="85" y="195">a timer going off</text>
+    <rect x="20" y="225" width="130" height="40" rx="8" fill="#f1faee" stroke="#457b9d"/><text x="85" y="250">typing in a box</text>
+    <text x="85" y="290" font-size="12" fill="#5b6472">things that happen</text>
+
+    <!-- queue -->
+    <rect x="200" y="120" width="170" height="90" rx="8" fill="#a8dadc" stroke="#457b9d"/>
+    <text x="285" y="112" font-size="12" fill="#5b6472">the event queue</text>
+    <rect x="212" y="148" width="44" height="34" rx="4" fill="#ffffff" stroke="#457b9d"/><text x="234" y="170" font-size="11">click</text>
+    <rect x="263" y="148" width="44" height="34" rx="4" fill="#ffffff" stroke="#457b9d"/><text x="285" y="170" font-size="11">key</text>
+    <rect x="314" y="148" width="44" height="34" rx="4" fill="#ffffff" stroke="#457b9d"/><text x="336" y="170" font-size="11">timer</text>
+
+    <!-- handler -->
+    <rect x="430" y="115" width="160" height="100" rx="8" fill="#1d3557"/>
+    <text x="510" y="145" fill="#ffffff">the browser calls</text>
+    <text x="510" y="165" fill="#ffffff">your listener function</text>
+    <text x="510" y="190" font-size="12" fill="#a8dadc" font-family="ui-monospace, Menlo, monospace">handleClick()</text>
+
+    <!-- effects -->
+    <rect x="630" y="60" width="130" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="695" y="85">it changes</text><text x="695" y="103">your objects</text>
+    <rect x="630" y="140" width="130" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="695" y="165">it changes</text><text x="695" y="183">the page (DOM)</text>
+    <rect x="630" y="220" width="130" height="60" rx="8" fill="#2a9d8f"/>
+    <text x="695" y="245" fill="#ffffff">the browser</text><text x="695" y="263" fill="#ffffff">redraws the page</text>
+  </g>
+  <g stroke="#1d3557" stroke-width="2" fill="none" marker-end="url(#a)">
+    <line x1="150" y1="80" x2="205" y2="135"/><line x1="150" y1="135" x2="197" y2="150"/>
+    <line x1="150" y1="190" x2="197" y2="178"/><line x1="150" y1="245" x2="205" y2="200"/>
+    <line x1="370" y1="165" x2="427" y2="165"/>
+    <line x1="590" y1="140" x2="627" y2="95"/><line x1="590" y1="168" x2="627" y2="170"/>
+    <line x1="695" y1="200" x2="695" y2="217"/>
+    <path d="M 630 255 Q 510 330 285 300 Q 270 260 285 213" stroke-dasharray="6 4"/>
+  </g>
+  <text x="440" y="340" font-size="13" fill="#5b6472" text-anchor="middle">then the next event in the queue - or wait for one</text>
+</svg>

@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 780 300" width="780" height="300" font-family="Arial, sans-serif">
+  <rect width="780" height="300" fill="#ffffff"/>
+  <defs>
+    <marker id="b" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d3557"/>
+    </marker>
+  </defs>
+  <!-- time axis -->
+  <line x1="30" y1="250" x2="750" y2="250" stroke="#5b6472" stroke-width="2" marker-end="url(#b)"/>
+  <text x="745" y="275" font-size="12" fill="#5b6472" text-anchor="end">time</text>
+
+  <!-- setup -->
+  <rect x="30" y="50" width="250" height="170" rx="10" fill="#a8dadc" stroke="#457b9d"/>
+  <text x="155" y="76" font-size="15" font-weight="bold" fill="#1d3557" text-anchor="middle">main.ts runs once</text>
+  <text x="155" y="94" font-size="12" fill="#1d3557" text-anchor="middle">when the page loads</text>
+  <g font-size="12" fill="#1b1f2a" font-family="ui-monospace, Menlo, monospace">
+    <text x="48" y="124">const button = ...</text>
+    <text x="48" y="146">function handleAdd() {...}</text>
+    <text x="48" y="168">button.addEventListener(</text>
+    <text x="72" y="186">"click", handleAdd);</text>
+    <text x="48" y="208">render();</text>
+  </g>
+
+  <!-- later -->
+  <text x="530" y="40" font-size="15" font-weight="bold" fill="#1d3557" text-anchor="middle">then, only when something happens ...</text>
+  <g font-size="12" text-anchor="middle">
+    <rect x="320" y="70" width="120" height="70" rx="8" fill="#1d3557"/>
+    <text x="380" y="98" fill="#ffffff">click</text>
+    <text x="380" y="118" fill="#a8dadc" font-family="ui-monospace, Menlo, monospace">handleAdd()</text>
+    <rect x="470" y="70" width="120" height="70" rx="8" fill="#1d3557"/>
+    <text x="530" y="98" fill="#ffffff">click</text>
+    <text x="530" y="118" fill="#a8dadc" font-family="ui-monospace, Menlo, monospace">handleAdd()</text>
+    <rect x="620" y="70" width="120" height="70" rx="8" fill="#1d3557"/>
+    <text x="680" y="98" fill="#ffffff">click</text>
+    <text x="680" y="118" fill="#a8dadc" font-family="ui-monospace, Menlo, monospace">handleAdd()</text>
+  </g>
+  <g stroke="#5b6472" stroke-dasharray="4 4">
+    <line x1="380" y1="140" x2="380" y2="250"/><line x1="530" y1="140" x2="530" y2="250"/><line x1="680" y1="140" x2="680" y2="250"/>
+  </g>
+  <rect x="385" y="184" width="290" height="42" fill="#ffffff"/>
+  <text x="530" y="200" font-size="13" fill="#5b6472" text-anchor="middle">in between, none of your code is running -</text>
+  <text x="530" y="218" font-size="13" fill="#5b6472" text-anchor="middle">the page just waits</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="400" viewBox="0 0 800 400" font-family="Arial, sans-serif">
+  <rect width="800" height="400" fill="#ffffff"/>
+  <text x="400" y="32" text-anchor="middle" font-size="20" font-weight="bold" fill="#1d3557">Is it a Shape? TypeScript checks the members, not the name</text>
+
+  <!-- the interface -->
+  <rect x="30" y="70" width="270" height="200" rx="8" fill="#f1faee" stroke="#1d3557" stroke-width="2"/>
+  <rect x="30" y="70" width="270" height="46" rx="8" fill="#1d3557"/>
+  <rect x="30" y="100" width="270" height="16" fill="#1d3557"/>
+  <text x="165" y="90" text-anchor="middle" font-size="13" fill="#a8dadc">interface</text>
+  <text x="165" y="109" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Shape</text>
+  <g font-family="Menlo, Consolas, monospace" font-size="14" fill="#1b1f2a">
+    <text x="48" y="146">name: string</text>
+    <text x="48" y="172">colour: string</text>
+    <text x="48" y="198">area(): number</text>
+    <text x="48" y="224">perimeter(): number</text>
+    <text x="48" y="250">draw(pen: Pen): void</text>
+  </g>
+
+  <!-- candidates -->
+  <g font-size="14" fill="#1b1f2a">
+    <rect x="340" y="62" width="370" height="62" rx="8" fill="#ffffff" stroke="#457b9d" stroke-width="2"/>
+    <text x="356" y="88" font-family="Menlo, Consolas, monospace" font-weight="bold">class Circle implements Shape</text>
+    <text x="356" y="110" fill="#5b6472">says so, and has every member</text>
+
+    <rect x="340" y="138" width="370" height="62" rx="8" fill="#ffffff" stroke="#457b9d" stroke-width="2"/>
+    <text x="356" y="164" font-family="Menlo, Consolas, monospace" font-weight="bold">class Dot</text>
+    <text x="356" y="186" fill="#5b6472">never mentions Shape, but has every member</text>
+
+    <rect x="340" y="214" width="370" height="62" rx="8" fill="#ffffff" stroke="#457b9d" stroke-width="2"/>
+    <text x="356" y="240" font-family="Menlo, Consolas, monospace" font-weight="bold">{ name, colour, area, perimeter, draw }</text>
+    <text x="356" y="262" fill="#5b6472">an object literal - a quick fake in a test</text>
+
+    <rect x="340" y="290" width="370" height="62" rx="8" fill="#ffffff" stroke="#e63946" stroke-width="2"/>
+    <text x="356" y="316" font-family="Menlo, Consolas, monospace" font-weight="bold">{ name, colour, area }</text>
+    <text x="356" y="338" fill="#5b6472">missing perimeter and draw</text>
+  </g>
+
+  <!-- ticks and cross -->
+  <g stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="748" cy="93" r="18" fill="#2a9d8f" stroke="none"/>
+    <path d="M739 93 l6 7 l12 -14" stroke="#ffffff"/>
+    <circle cx="748" cy="169" r="18" fill="#2a9d8f" stroke="none"/>
+    <path d="M739 169 l6 7 l12 -14" stroke="#ffffff"/>
+    <circle cx="748" cy="245" r="18" fill="#2a9d8f" stroke="none"/>
+    <path d="M739 245 l6 7 l12 -14" stroke="#ffffff"/>
+    <circle cx="748" cy="321" r="18" fill="#e63946" stroke="none"/>
+    <path d="M741 314 l14 14 M755 314 l-14 14" stroke="#ffffff"/>
+  </g>
+
+  <!-- connector -->
+  <path d="M300 170 L325 170" stroke="#1d3557" stroke-width="2"/>
+  <path d="M325 93 L325 321" stroke="#1d3557" stroke-width="2"/>
+  <g stroke="#1d3557" stroke-width="2">
+    <path d="M325 93 L340 93"/><path d="M325 169 L340 169"/><path d="M325 245 L340 245"/><path d="M325 321 L340 321"/>
+  </g>
+
+  <text x="400" y="386" text-anchor="middle" font-size="14" fill="#1b1f2a">In Java only <tspan font-weight="bold">Circle</tspan> would count: a Java class is a Shape only if it says <tspan font-family="Menlo, Consolas, monospace">implements Shape</tspan>.</text>
+</svg>

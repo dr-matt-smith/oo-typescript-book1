@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Bank Account</title>
+  </head>
+  <body>
+    <main>
+      <h1>Bank Account</h1>
+      <section class="card">
+        <p id="owner" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+        <p class="balance-line">Balance: <span id="balance"></span></p>
+      </section>
+      <!-- CHALLENGE 4: the second account -->
+      <section class="card">
+        <p id="other-owner" class="muted"></p>
+        <p class="balance-line">Balance: <span id="other-balance"></span></p>
+      </section>
+      <section class="card">
+        <div class="controls">
+          <label>€ <input id="amount" type="number" min="0" step="0.01" placeholder="0.00" aria-label="Amount in euros" /></label>
+          <button id="deposit">Deposit</button>
+          <button id="withdraw">Withdraw</button>
+          <button id="transfer-to-other" class="secondary">Transfer to Ben</button> <!-- CHALLENGE 4 -->
+          <button id="transfer-back" class="secondary">Transfer to Aoife</button> <!-- CHALLENGE 4 -->
+        </div>
+        <p id="message"></p>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

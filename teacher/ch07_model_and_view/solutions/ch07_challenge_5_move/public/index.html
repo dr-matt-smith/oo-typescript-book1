@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>To-do List</title>
+  </head>
+  <body>
+    <main>
+      <h1>To-do List</h1>
+      <section class="card">
+        <div class="add-row">
+          <input id="new-todo" placeholder="What needs doing?" aria-label="New to-do" />
+          <button id="add">Add</button>
+        </div>
+        <div class="filters">
+          <button id="filter-all" class="secondary">All</button>
+          <button id="filter-active" class="secondary">Active</button>
+          <button id="filter-done" class="secondary">Done</button>
+          <span id="remaining" class="muted">(if you can read this, dist/app.js has not run - build the project)</span>
+        </div>
+        <ul id="todos" class="todos"></ul>
+        <p id="empty" class="muted"></p>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

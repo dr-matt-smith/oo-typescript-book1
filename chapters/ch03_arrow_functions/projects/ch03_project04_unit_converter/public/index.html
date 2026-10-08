@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Unit Converter</title>
+  </head>
+  <body>
+    <main>
+      <h1>Unit Converter</h1>
+      <section class="card">
+        <div class="controls">
+          <select id="converter" aria-label="Conversion"></select>
+          <input id="value" type="number" value="10" aria-label="Value to convert" />
+        </div>
+        <p id="result" class="big-text">(if you can read this, dist/app.js has not run - build the project)</p>
+        <table>
+          <thead><tr><th>From</th><th>To</th></tr></thead>
+          <tbody id="examples"></tbody>
+        </table>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

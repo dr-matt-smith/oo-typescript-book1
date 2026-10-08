@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Thermostat</title>
+  </head>
+  <body>
+    <main>
+      <h1>Thermostat</h1>
+      <section class="card dial">
+        <button id="down" aria-label="Cooler">−</button>
+        <div>
+          <p class="muted small">Target</p>
+          <p id="target">(if you can read this, dist/app.js has not run - build the project)</p>
+        </div>
+        <button id="up" aria-label="Warmer">+</button>
+      </section>
+      <p id="status" class="status"></p>
+      <p class="centre"><button id="holiday" class="secondary">Start holiday</button></p> <!-- CHALLENGE 6 -->
+      <section class="card">
+        <label>Room temperature (the sensor): <strong id="room"></strong></label>
+        <input id="room-slider" type="range" min="0" max="35" step="0.5" value="17" aria-label="Room temperature" />
+      </section>
+      <section class="card">
+        <div class="controls">
+          <input id="target-box" type="number" step="0.5" placeholder="21.5" aria-label="New target" />
+          <button id="set">Set target</button>
+        </div>
+        <p id="message" class="bad"></p>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

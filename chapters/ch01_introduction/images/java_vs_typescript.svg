@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 300" width="760" height="300" font-family="Arial, sans-serif">
+  <rect width="760" height="300" fill="#ffffff"/>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#1d3557"/>
+    </marker>
+  </defs>
+  <text x="20" y="34" font-size="18" font-weight="bold" fill="#1b1f2a">Java</text>
+  <g font-size="14" fill="#1b1f2a" text-anchor="middle">
+    <rect x="20" y="50" width="150" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="95" y="76">Main.java</text><text x="95" y="96" font-size="12" fill="#5b6472">source, with types</text>
+    <rect x="215" y="50" width="150" height="60" rx="8" fill="#a8dadc" stroke="#457b9d"/>
+    <text x="290" y="76">javac</text><text x="290" y="96" font-size="12" fill="#1d3557">checks types, compiles</text>
+    <rect x="410" y="50" width="150" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="485" y="76">Main.class</text><text x="485" y="96" font-size="12" fill="#5b6472">bytecode</text>
+    <rect x="605" y="50" width="135" height="60" rx="8" fill="#1d3557"/>
+    <text x="672" y="76" fill="#ffffff">JVM</text><text x="672" y="96" font-size="12" fill="#a8dadc">runs bytecode</text>
+  </g>
+  <g stroke="#1d3557" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="170" y1="80" x2="212" y2="80"/><line x1="365" y1="80" x2="407" y2="80"/><line x1="560" y1="80" x2="602" y2="80"/>
+  </g>
+
+  <text x="20" y="164" font-size="18" font-weight="bold" fill="#1b1f2a">TypeScript (this book)</text>
+  <g font-size="14" fill="#1b1f2a" text-anchor="middle">
+    <rect x="20" y="180" width="150" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="95" y="206">src/*.ts</text><text x="95" y="226" font-size="12" fill="#5b6472">source, with types</text>
+    <rect x="215" y="180" width="150" height="60" rx="8" fill="#a8dadc" stroke="#457b9d"/>
+    <text x="290" y="206">deno (build.ts)</text><text x="290" y="226" font-size="12" fill="#1d3557">checks types, bundles</text>
+    <rect x="410" y="180" width="150" height="60" rx="8" fill="#f1faee" stroke="#457b9d"/>
+    <text x="485" y="206">dist/app.js</text><text x="485" y="226" font-size="12" fill="#5b6472">JavaScript, no types</text>
+    <rect x="605" y="180" width="135" height="60" rx="8" fill="#1d3557"/>
+    <text x="672" y="206" fill="#ffffff">web browser</text><text x="672" y="226" font-size="12" fill="#a8dadc">runs JavaScript</text>
+  </g>
+  <g stroke="#1d3557" stroke-width="2" marker-end="url(#arrow)">
+    <line x1="170" y1="210" x2="212" y2="210"/><line x1="365" y1="210" x2="407" y2="210"/><line x1="560" y1="210" x2="602" y2="210"/>
+  </g>
+  <text x="380" y="282" font-size="13" fill="#5b6472" text-anchor="middle">In both, the types are checked before the program runs. Java keeps some type information in the bytecode;</text>
+  <text x="380" y="298" font-size="13" fill="#5b6472" text-anchor="middle" dy="-2">TypeScript removes it all - the browser never sees a type.</text>
+</svg>

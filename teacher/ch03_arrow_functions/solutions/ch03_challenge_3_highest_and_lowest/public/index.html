@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Marks Table</title>
+  </head>
+  <body>
+    <main>
+      <h1>Marks Table</h1>
+      <div class="controls">
+        <button id="by-name">Sort by name</button>
+        <button id="by-mark">Sort by mark</button>
+        <label><input type="checkbox" id="passes-only" /> Passes only</label>
+      </div>
+      <section class="card">
+        <p id="summary" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+        <table>
+          <thead><tr><th>Name</th><th>Mark</th><th>Grade</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Traffic Light</title>
+  </head>
+  <body>
+    <main>
+      <h1>Traffic Light</h1>
+      <!-- CHALLENGE 6: two lights, north-south (ns-) and east-west (ew-) -->
+      <section class="card junction">
+        <div class="light">
+          <div class="housing" aria-hidden="true">
+            <div class="lamp red" id="ns-lamp-red"></div>
+            <div class="lamp amber" id="ns-lamp-amber"></div>
+            <div class="lamp green" id="ns-lamp-green"></div>
+          </div>
+          <h2 id="ns-name"></h2>
+          <p id="ns-colour"></p>
+        </div>
+        <div class="light">
+          <div class="housing" aria-hidden="true">
+            <div class="lamp red" id="ew-lamp-red"></div>
+            <div class="lamp amber" id="ew-lamp-amber"></div>
+            <div class="lamp green" id="ew-lamp-green"></div>
+          </div>
+          <h2 id="ew-name"></h2>
+          <p id="ew-colour"></p>
+        </div>
+        <div class="readout">
+          <p id="phase" class="big">(if you can read this, dist/app.js has not run - build the project)</p>
+          <div class="controls">
+            <button id="next">Next</button>
+            <label><input type="checkbox" id="auto" /> Change by itself</label>
+          </div>
+        </div>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

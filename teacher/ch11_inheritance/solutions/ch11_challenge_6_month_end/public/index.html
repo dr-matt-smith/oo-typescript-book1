@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Bank Accounts</title>
+  </head>
+  <body>
+    <main>
+      <h1>Bank Accounts</h1>
+      <p><button id="month-end" class="secondary">End of month</button></p> <!-- CHALLENGE 6 -->
+      <p id="message" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+      <section class="card account" id="savings-card">
+        <h2 id="savings-title">Savings account</h2>
+        <p id="savings-available" class="muted"></p>
+        <div class="controls">
+          <input id="savings-amount" type="number" min="0" step="0.01" value="20" aria-label="Amount" />
+          <button id="savings-deposit">Deposit</button>
+          <button id="savings-withdraw">Withdraw</button>
+          <button id="savings-interest" class="secondary">Add interest</button>
+        </div>
+      </section>
+      <section class="card account" id="current-card">
+        <h2 id="current-title">Current account</h2>
+        <p id="current-available" class="muted"></p>
+        <div class="controls">
+          <input id="current-amount" type="number" min="0" step="0.01" value="20" aria-label="Amount" />
+          <button id="current-deposit">Deposit</button>
+          <button id="current-withdraw">Withdraw</button>
+        </div>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

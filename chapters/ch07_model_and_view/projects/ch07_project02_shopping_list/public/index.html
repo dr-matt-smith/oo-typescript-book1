@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Shopping List</title>
+  </head>
+  <body>
+    <main>
+      <h1>Shopping List</h1>
+      <section class="card">
+        <div class="add-row">
+          <input id="new-item" placeholder="milk, bread, ..." aria-label="New item" />
+          <button id="add">Add</button>
+        </div>
+        <p id="message" class="bad"></p>
+        <p id="summary" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+        <ul id="items" class="items"></ul>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

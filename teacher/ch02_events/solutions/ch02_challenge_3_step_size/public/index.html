@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Click Counter</title>
+  </head>
+  <body>
+    <main>
+      <h1>Click Counter</h1>
+      <section class="card counter">
+        <div id="count" class="big-number">?</div>
+        <p id="message" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+        <div class="buttons">
+          <!-- CHALLENGE 3 -->
+          <select id="step" aria-label="Step size">
+            <option value="1">in 1s</option>
+            <option value="5">in 5s</option>
+            <option value="10">in 10s</option>
+          </select>
+          <button id="add">Click me</button>
+          <button id="reset" class="secondary">Reset</button>
+        </div>
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

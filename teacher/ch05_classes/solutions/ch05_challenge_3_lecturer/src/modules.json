@@ -1,0 +1,11 @@
+[
+  { "code": "COMP1001", "title": "Programming 1", "credits": 10, "semester": 1, "lecturer": "Dr Byrne" },
+  { "code": "COMP1002", "title": "Computer Architecture", "semester": 1 },
+  { "code": "MATH1001", "title": "Discrete Mathematics", "semester": 1 },
+  { "code": "COMP1003", "title": "Web Development", "semester": 1 },
+  { "code": "COMP1004", "title": "Programming 2", "credits": 10, "semester": 2 },
+  { "code": "COMP1005", "title": "Databases", "semester": 2, "lecturer": "Dr Nolan" },
+  { "code": "MATH1002", "title": "Statistics", "semester": 2 },
+  { "code": "COMP1006", "title": "Operating Systems", "semester": 2 },
+  { "code": "COMP1010", "title": "Team Project", "credits": 10, "lecturer": "Dr Okafor" }
+]

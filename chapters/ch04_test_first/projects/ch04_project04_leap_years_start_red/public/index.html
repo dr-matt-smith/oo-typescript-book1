@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Leap Years</title>
+  </head>
+  <body>
+    <main>
+      <h1>Leap Years</h1>
+      <section class="card">
+        <label>Year <input type="number" id="year" value="2024" /></label>
+        <p id="answer" class="answer">(if you can read this, dist/app.js has not run - build the project)</p>
+      </section>
+      <section class="card">
+        <h2>Leap years from 2020 to 2060</h2>
+        <p id="upcoming"></p>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

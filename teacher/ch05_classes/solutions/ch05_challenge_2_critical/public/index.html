@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Dice Roller</title>
+  </head>
+  <body>
+    <main>
+      <h1>Dice Roller</h1>
+      <div class="controls">
+        <label>Sides
+          <select id="sides">
+            <option value="4">4</option>
+            <option value="6" selected>6</option>
+            <option value="8">8</option>
+            <option value="10">10</option>
+            <option value="12">12</option>
+            <option value="20">20</option>
+          </select>
+        </label>
+        <button id="roll">Roll</button>
+      </div>
+      <section class="card centre">
+        <div id="face" class="face">?</div>
+        <p id="description" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+        <p id="history"></p>
+      </section>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>

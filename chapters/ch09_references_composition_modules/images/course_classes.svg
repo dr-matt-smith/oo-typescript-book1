@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="430" viewBox="0 0 800 430">
+<rect width="800" height="430" fill="#ffffff"/>
+<rect x="270" y="20" width="260" height="167" fill="#ffffff" stroke="#1d3557" stroke-width="1.5"/>
+<rect x="270" y="20" width="260" height="28" fill="#a8dadc" stroke="#1d3557" stroke-width="1.5"/>
+<text x="400.0" y="39" font-family="Arial" font-size="15" text-anchor="middle" font-weight="bold" fill="#1d3557">Course</text>
+<line x1="270" y1="109" x2="530" y2="109" stroke="#1d3557" stroke-width="1.5"/>
+<text x="278" y="65" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ name: string</text>
+<text x="278" y="82" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">- modules: Module[]</text>
+<text x="278" y="99" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">- students: Student[]</text>
+<text x="278" y="126" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ addModule(...): Module</text>
+<text x="278" y="143" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ addStudent(...): Student</text>
+<text x="278" y="160" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ enrol(code, id): void</text>
+<text x="278" y="177" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ totalCredits(): number</text>
+<rect x="15" y="250" width="300" height="133" fill="#ffffff" stroke="#1d3557" stroke-width="1.5"/>
+<rect x="15" y="250" width="300" height="28" fill="#a8dadc" stroke="#1d3557" stroke-width="1.5"/>
+<text x="165.0" y="269" font-family="Arial" font-size="15" text-anchor="middle" font-weight="bold" fill="#1d3557">Module</text>
+<line x1="15" y1="322" x2="315" y2="322" stroke="#1d3557" stroke-width="1.5"/>
+<text x="23" y="295" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ code, title, credits</text>
+<text x="23" y="312" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">- students: Student[]</text>
+<text x="23" y="339" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ enrol(student): void</text>
+<text x="23" y="356" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ withdraw(id): void</text>
+<text x="23" y="373" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ getStudents(): readonly Student[]</text>
+<rect x="545" y="270" width="225" height="99" fill="#ffffff" stroke="#1d3557" stroke-width="1.5"/>
+<rect x="545" y="270" width="225" height="28" fill="#a8dadc" stroke="#1d3557" stroke-width="1.5"/>
+<text x="657.5" y="289" font-family="Arial" font-size="15" text-anchor="middle" font-weight="bold" fill="#1d3557">Student</text>
+<line x1="545" y1="342" x2="770" y2="342" stroke="#1d3557" stroke-width="1.5"/>
+<text x="553" y="315" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ id: string</text>
+<text x="553" y="332" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ name: string</text>
+<text x="553" y="359" font-family="Courier New, monospace" font-size="12" text-anchor="start" font-weight="normal" fill="#1b1f2a">+ toString(): string</text>
+<line x1="320" y1="187" x2="190" y2="250" stroke="#1d3557" stroke-width="2"/>
+<text x="322" y="205" font-family="Arial" font-size="13" text-anchor="start" font-weight="normal" fill="#1b1f2a">1</text>
+<text x="182" y="246" font-family="Arial" font-size="13" text-anchor="end" font-weight="normal" fill="#1b1f2a">1..*</text>
+<text x="215" y="215" font-family="Arial" font-size="13" text-anchor="end" font-weight="bold" fill="#2a9d8f">has (owns)</text>
+<line x1="480" y1="187" x2="620" y2="270" stroke="#1d3557" stroke-width="2"/>
+<text x="478" y="205" font-family="Arial" font-size="13" text-anchor="end" font-weight="normal" fill="#1b1f2a">1</text>
+<text x="630" y="262" font-family="Arial" font-size="13" text-anchor="start" font-weight="normal" fill="#1b1f2a">0..*</text>
+<text x="585" y="215" font-family="Arial" font-size="13" text-anchor="start" font-weight="bold" fill="#2a9d8f">has (owns)</text>
+<line x1="315" y1="320" x2="545" y2="320" stroke="#1d3557" stroke-width="2" stroke-dasharray="6 4"/>
+<text x="322" y="312" font-family="Arial" font-size="13" text-anchor="start" font-weight="normal" fill="#1b1f2a">0..*</text>
+<text x="538" y="312" font-family="Arial" font-size="13" text-anchor="end" font-weight="normal" fill="#1b1f2a">0..*</text>
+<text x="430" y="340" font-family="Arial" font-size="13" text-anchor="middle" font-weight="bold" fill="#457b9d">refers to (shared)</text>
+<text x="400" y="405" font-family="Arial" font-size="13" text-anchor="middle" font-weight="normal" fill="#1b1f2a">Solid lines: composition - the course creates its modules and students.</text>
+<text x="400" y="423" font-family="Arial" font-size="13" text-anchor="middle" font-weight="normal" fill="#1b1f2a">Dashed line: aggregation - a module shares the course's Student objects.</text>
+</svg>

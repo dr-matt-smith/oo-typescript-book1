@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="380" viewBox="0 0 800 380" font-family="Arial, sans-serif">
+  <rect width="800" height="380" fill="#ffffff"/>
+  <defs>
+    <marker id="down" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <path d="M0,0 L10,5 L0,10 z" fill="#457b9d"/>
+    </marker>
+  </defs>
+
+  <text x="400" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#1d3557">private age  vs  #balance</text>
+
+  <!-- column headings -->
+  <text x="215" y="66" text-anchor="middle" font-size="17" font-weight="bold" fill="#1b1f2a" font-family="Courier New, monospace">private age: number</text>
+  <text x="590" y="66" text-anchor="middle" font-size="17" font-weight="bold" fill="#1b1f2a" font-family="Courier New, monospace">#balance: number</text>
+
+  <!-- row labels -->
+  <text x="20" y="115" font-size="13" font-weight="bold" fill="#457b9d">TypeScript</text>
+  <text x="20" y="133" font-size="13" font-weight="bold" fill="#457b9d">(deno check)</text>
+  <text x="20" y="265" font-size="13" font-weight="bold" fill="#457b9d">JavaScript</text>
+  <text x="20" y="283" font-size="13" font-weight="bold" fill="#457b9d">(dist/app.js)</text>
+
+  <!-- TS row -->
+  <rect x="110" y="85" width="210" height="110" rx="10" fill="#f1faee" stroke="#457b9d" stroke-width="2"/>
+  <text x="125" y="112" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">pet.age = -3</text>
+  <text x="125" y="132" font-size="13" fill="#2a9d8f" font-weight="bold">error: private</text>
+  <text x="125" y="160" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">pet["age"] = -3</text>
+  <text x="125" y="180" font-size="13" fill="#e63946" font-weight="bold">no error - it slips past</text>
+
+  <rect x="485" y="85" width="210" height="110" rx="10" fill="#f1faee" stroke="#457b9d" stroke-width="2"/>
+  <text x="500" y="112" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">a.#balance = 9</text>
+  <text x="500" y="132" font-size="13" fill="#2a9d8f" font-weight="bold">error: private identifier</text>
+  <text x="500" y="160" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">a.balance = 9</text>
+  <text x="500" y="180" font-size="13" fill="#2a9d8f" font-weight="bold">error: read-only (a getter)</text>
+
+  <!-- arrows: build -->
+  <line x1="215" y1="198" x2="215" y2="232" stroke="#457b9d" stroke-width="2" marker-end="url(#down)"/>
+  <line x1="590" y1="198" x2="590" y2="232" stroke="#457b9d" stroke-width="2" marker-end="url(#down)"/>
+  <text x="400" y="220" text-anchor="middle" font-size="13" fill="#5b6472">build: the types are removed</text>
+
+  <!-- JS row -->
+  <rect x="110" y="240" width="210" height="110" rx="10" fill="#e63946" fill-opacity="0.12" stroke="#e63946" stroke-width="2"/>
+  <text x="125" y="267" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">age;</text>
+  <text x="125" y="290" font-size="13" fill="#1b1f2a">an ordinary property:</text>
+  <text x="125" y="310" font-size="13" fill="#1b1f2a">"private" has gone,</text>
+  <text x="125" y="330" font-size="13" fill="#1b1f2a">anyone can change it</text>
+
+  <rect x="485" y="240" width="210" height="110" rx="10" fill="#2a9d8f" fill-opacity="0.15" stroke="#2a9d8f" stroke-width="2"/>
+  <text x="500" y="267" font-size="14" fill="#1b1f2a" font-family="Courier New, monospace">#balance;</text>
+  <text x="500" y="290" font-size="13" fill="#1b1f2a">still private: the</text>
+  <text x="500" y="310" font-size="13" fill="#1b1f2a">JavaScript engine itself</text>
+  <text x="500" y="330" font-size="13" fill="#1b1f2a">keeps outsiders out</text>
+</svg>

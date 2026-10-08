@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="780" height="330" viewBox="0 0 780 330" font-family="Arial, sans-serif">
+  <rect width="780" height="330" fill="#ffffff"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#1d3557"/>
+    </marker>
+  </defs>
+  <text x="20" y="30" font-size="15" font-weight="bold" fill="#1d3557">new Student("Ann", "ann@college.ie", "S1", "Computing")</text>
+  <!-- step boxes -->
+  <rect x="20" y="55" width="350" height="90" rx="6" fill="#f1faee" stroke="#457b9d" stroke-width="2"/>
+  <text x="35" y="78" font-size="14" font-weight="bold" fill="#457b9d">1. Student's constructor starts</text>
+  <text x="35" y="100" font-size="13" fill="#1b1f2a">it receives all four arguments:</text>
+  <text x="35" y="120" font-size="13" fill="#1b1f2a">name, email, studentId, course</text>
+  <text x="35" y="138" font-size="13" fill="#e63946">this cannot be used yet</text>
+  <rect x="410" y="55" width="350" height="90" rx="6" fill="#f1faee" stroke="#1d3557" stroke-width="2"/>
+  <text x="425" y="78" font-size="14" font-weight="bold" fill="#1d3557">2. super(name, email)</text>
+  <text x="425" y="100" font-size="13" fill="#1b1f2a">runs Person's constructor:</text>
+  <text x="425" y="120" font-size="13" fill="#1b1f2a">name and email are set, and the email</text>
+  <text x="425" y="138" font-size="13" fill="#1b1f2a">is checked (it may throw an Error)</text>
+  <rect x="410" y="185" width="350" height="70" rx="6" fill="#f1faee" stroke="#2a9d8f" stroke-width="2"/>
+  <text x="425" y="208" font-size="14" font-weight="bold" fill="#2a9d8f">3. back in Student</text>
+  <text x="425" y="230" font-size="13" fill="#1b1f2a">studentId and course are stored;</text>
+  <text x="425" y="248" font-size="13" fill="#1b1f2a">this can be used from here on</text>
+  <rect x="20" y="185" width="350" height="70" rx="6" fill="#a8dadc" stroke="#1d3557" stroke-width="2"/>
+  <text x="35" y="208" font-size="14" font-weight="bold" fill="#1d3557">4. the finished object</text>
+  <text x="35" y="230" font-size="13" fill="#1b1f2a">name, email (from Person)</text>
+  <text x="35" y="248" font-size="13" fill="#1b1f2a">studentId, course (from Student)</text>
+  <line x1="370" y1="100" x2="406" y2="100" stroke="#1d3557" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="585" y1="145" x2="585" y2="181" stroke="#1d3557" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="410" y1="220" x2="374" y2="220" stroke="#1d3557" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="20" y="295" font-size="14" fill="#1b1f2a">toString():  super.toString()  gives  "Ann &lt;ann@college.ie&gt;"</text>
+  <text x="20" y="317" font-size="14" fill="#1b1f2a">and Student adds  ", student S1, Computing"</text>
+</svg>

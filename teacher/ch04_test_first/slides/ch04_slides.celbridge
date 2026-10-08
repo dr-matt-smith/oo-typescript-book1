@@ -1,0 +1,20 @@
+[celbridge]
+celbridge-version = "1.2.0"
+project-version = "0.1.0"
+
+# The teacher's slides for ch04_test_first. slides.story opens in the Story Builder editor (in
+# tools/story-builder/): Play presents the slides; the graph or list view shows them all.
+[celbridge.resources]
+hide = [".gitignore", ".DS_Store", "Thumbs.db", "desktop.ini"]
+search-exclude = ["tools"]
+
+[[shortcut]]
+resource = "slides.story"
+icon = "bs-easel"
+area = "main"
+open-on-load = true
+
+[[shortcut]]
+resource = "slides.pdf"
+icon = "bs-file-earmark-pdf"
+area = "side"

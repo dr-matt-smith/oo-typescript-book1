@@ -1,0 +1,12 @@
+[
+  { "name": "Tomato soup", "course": "starter", "diet": "vegan", "price": 650 },
+  { "name": "Garlic mushrooms", "course": "starter", "diet": "vegetarian", "price": 750 },
+  { "name": "Chicken wings", "course": "starter", "diet": "meat", "price": 850 },
+  { "name": "Vegetable curry", "course": "main", "diet": "vegan", "price": 1450 },
+  { "name": "Cheese and onion pie", "course": "main", "diet": "vegetarian", "price": 1550 },
+  { "name": "Beef burger", "course": "main", "diet": "meat", "price": 1695 },
+  { "name": "Fish and chips", "course": "main", "diet": "meat", "price": 1595 },
+  { "name": "Fruit salad", "course": "dessert", "diet": "vegan", "price": 595 },
+  { "name": "Apple crumble", "course": "dessert", "diet": "vegetarian", "price": 695 },
+  { "name": "Chocolate brownie", "course": "dessert", "diet": "vegetarian", "price": 650 }
+]

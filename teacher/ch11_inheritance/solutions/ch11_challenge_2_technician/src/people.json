@@ -1,0 +1,54 @@
+{
+  "students": [
+    {
+      "name": "Aoife Byrne",
+      "email": "aoife.byrne@student.college.ie",
+      "studentId": "S1001",
+      "course": "Computing"
+    },
+    {
+      "name": "Tomás Walsh",
+      "email": "tomas.walsh@student.college.ie",
+      "studentId": "S1002",
+      "course": "Games Design"
+    },
+    {
+      "name": "Priya Nair",
+      "email": "priya.nair@student.college.ie",
+      "studentId": "S1003",
+      "course": "Computing"
+    },
+    {
+      "name": "Jack Doyle",
+      "email": "jack.doyle@student.college.ie",
+      "studentId": "S1004",
+      "course": "Data Science"
+    }
+  ],
+  "lecturers": [
+    {
+      "name": "Dr Ciara Kelly",
+      "email": "ciara.kelly@college.ie",
+      "department": "Computing",
+      "office": "A214"
+    },
+    {
+      "name": "Dr Mark Ryan",
+      "email": "mark.ryan@college.ie",
+      "department": "Mathematics",
+      "office": "B105"
+    }
+  ],
+  "technicians": [
+    {
+      "name": "Sam Quinn",
+      "email": "sam.quinn@college.ie",
+      "lab": "C12"
+    },
+    {
+      "name": "Niamh Foley",
+      "email": "niamh.foley@college.ie",
+      "lab": "A101"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Course Modules</title>
+  </head>
+  <body>
+    <main>
+      <h1>Course Modules</h1>
+      <p id="summary" class="muted">(if you can read this, dist/app.js has not run - build the project)</p>
+      <label>Module <select id="module"></select></label>
+      <section class="card">
+        <h2 id="module-summary"></h2>
+        <ul id="students" class="students"></ul>
+        <div class="controls">
+          <select id="student"></select>
+          <button id="enrol">Enrol</button>
+        </div>
+        <p id="student-modules" class="muted">Click a student to see their modules.</p> <!-- CHALLENGE 4 -->
+      </section>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

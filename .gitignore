@@ -1,0 +1,7 @@
+dist/
+test_output/
+.celbridge/
+coverage/
+node_modules/
+.DS_Store
+.idea/

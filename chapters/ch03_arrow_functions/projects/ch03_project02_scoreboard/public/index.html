@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Basketball Scoreboard</title>
+  </head>
+  <body>
+    <main>
+      <h1>Basketball Scoreboard</h1>
+      <section class="card board">
+        <div class="team">
+          <h2>Home</h2>
+          <div id="home-score" class="score">?</div>
+          <div id="home-buttons" class="buttons"></div>
+        </div>
+        <div class="team">
+          <h2>Away</h2>
+          <div id="away-score" class="score">?</div>
+          <div id="away-buttons" class="buttons"></div>
+        </div>
+      </section>
+      <p id="leader" class="muted centred">(if you can read this, dist/app.js has not run - build the project)</p>
+      <p class="centred"><button id="reset" class="secondary">New game</button></p>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

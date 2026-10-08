@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>Aliasing Lab</title>
+  </head>
+  <body>
+    <main>
+      <h1>Aliasing Lab</h1>
+      <p class="muted">1. Make basket B from basket A:</p>
+      <div id="copy-buttons" class="controls"></div>
+      <p class="muted">2. Change basket B:</p>
+      <div class="controls">
+        <button id="add-eggs">Add eggs to B</button>
+        <button id="one-more">One more of B's first item</button>
+        <button id="reset" class="secondary">Start again</button>
+      </div>
+      <p><code id="code">(if you can read this, dist/app.js has not run - build the project)</code></p>
+      <div class="baskets">
+        <section class="card">
+          <h2>Basket A</h2>
+          <ul id="basket-a"></ul>
+        </section>
+        <section class="card">
+          <h2>Basket B</h2>
+          <ul id="basket-b"></ul>
+        </section>
+      </div>
+      <p id="status" class="status"></p>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>

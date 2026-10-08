@@ -1,0 +1,95 @@
+{
+  "songs": [
+    {
+      "title": "Bohemian Rhapsody",
+      "artist": "Queen",
+      "seconds": 354
+    },
+    {
+      "title": "Yellow",
+      "artist": "Coldplay",
+      "seconds": 269
+    },
+    {
+      "title": "Song 2",
+      "artist": "Blur",
+      "seconds": 122
+    },
+    {
+      "title": "Zombie",
+      "artist": "The Cranberries",
+      "seconds": 306
+    },
+    {
+      "title": "Hey Ya!",
+      "artist": "OutKast",
+      "seconds": 235
+    }
+  ],
+  "planets": [
+    {
+      "name": "Jupiter",
+      "millionKm": 778
+    },
+    {
+      "name": "Mercury",
+      "millionKm": 58
+    },
+    {
+      "name": "Mars",
+      "millionKm": 228
+    },
+    {
+      "name": "Earth",
+      "millionKm": 150
+    },
+    {
+      "name": "Venus",
+      "millionKm": 108
+    }
+  ],
+  "mountains": [
+    {
+      "name": "Carrauntoohil",
+      "metres": 1039
+    },
+    {
+      "name": "Mont Blanc",
+      "metres": 4806
+    },
+    {
+      "name": "Everest",
+      "metres": 8849
+    },
+    {
+      "name": "Ben Nevis",
+      "metres": 1345
+    },
+    {
+      "name": "Kilimanjaro",
+      "metres": 5895
+    }
+  ],
+  "cities": [
+    {
+      "name": "Galway",
+      "population": 85910
+    },
+    {
+      "name": "Dublin",
+      "population": 592713
+    },
+    {
+      "name": "Limerick",
+      "population": 102287
+    },
+    {
+      "name": "Cork",
+      "population": 224004
+    },
+    {
+      "name": "Waterford",
+      "population": 60079
+    }
+  ]
+}

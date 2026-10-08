@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="styles.css" />
+    <title>FizzBuzz</title>
+  </head>
+  <body>
+    <main>
+      <h1>FizzBuzz</h1>
+      <p class="muted">Multiples of 3 are Fizz, multiples of 5 are Buzz, multiples of both are FizzBuzz, and multiples of 7 are Whizz.</p> <!-- CHALLENGE 1 -->
+      <label>Count up to <input type="number" id="count" value="30" min="0" max="100" /></label>
+      <ol id="answers" class="answers"><li>(if you can read this, dist/app.js has not run - build the project)</li></ol>
+    </main>
+    <!-- app.js is built from src/main.ts. Loaded last, so the elements above already exist. -->
+    <script src="app.js"></script>
+  </body>
+</html>
