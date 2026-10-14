@@ -67,7 +67,7 @@ async function copyFolder(from: URL, to: URL): Promise<void> {
   for await (const entry of Deno.readDir(from)) {
     if (entry.isDirectory) {
       await copyFolder(new URL(entry.name + "/", from), new URL(entry.name + "/", to));
-    } else if (entry.name !== ".DS_Store") {
+    } else if (entry.name !== ".DS_Store" && !entry.name.endsWith(".cel")) { // .cel = Celbridge editor settings
       await Deno.copyFile(new URL(entry.name, from), new URL(entry.name, to));
       copied++;
     }

@@ -36,7 +36,7 @@ if (Deno.args.length > 0) {
 
 function celbridgeFile(chapter: string): string {
   return `[celbridge]
-celbridge-version = "1.2.0"
+celbridge-version = "1.4.0"
 project-version = "0.1.0"
 
 # The teacher's slides for ${chapter}. slides.story opens in the Story Builder editor (in
