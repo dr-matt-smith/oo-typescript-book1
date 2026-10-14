@@ -6,9 +6,24 @@
 //   test_output/tap.txt      the test results in TAP format (as printed in the console)
 //   test_output/results.json the raw results, for other tools
 //
-// build.ts calls runTests() after every build. On its own:  deno task test
+// build.ts calls runTests() after every build. On its own:  deno task test   OR   npm test
+//
+// It works with both Deno and Node. With Deno, Deno's own tools do the work: deno check, deno test and
+// deno lint. With Node, the TypeScript compiler (tsc) type checks, and tools/node_tests.ts runs the tests
+// with Node's test runner; there is no linter.
 //
 // You never need to edit this file.
+
+import { spawn } from "node:child_process";
+import { createRequire } from "node:module";
+import { mkdir, writeFile } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import process from "node:process";
+import { runNodeTests } from "./node_tests.ts";
+
+/** Which program is running this file: Deno or Node. */
+export const RUNTIME: "Deno" | "Node" =
+  typeof (globalThis as { Deno?: { version?: { deno?: string } } }).Deno?.version?.deno === "string" ? "Deno" : "Node";
 
 export type Status = "pass" | "fail" | "skip";
 
@@ -43,6 +58,8 @@ export interface Report {
   runError?: string;
   typeErrors: Problem[];
   lintWarnings: Problem[];
+  lintRun: boolean; // false with Node, which has no linter
+  runtime: string; // e.g. "Deno 2.9.6" or "Node 26.8.1"
   counts: { passed: number; failed: number; skipped: number };
 }
 
@@ -50,21 +67,36 @@ export interface Report {
 // Running the tools
 // ---------------------------------------------------------------------------------------------
 
-async function denoOutput(root: URL, args: string[]): Promise<{ ok: boolean; out: string; err: string }> {
-  const result = await new Deno.Command(Deno.execPath(), {
-    args,
-    cwd: root,
-    stdout: "piped",
-    stderr: "piped",
-    env: { NO_COLOR: "1" }, // plain text, so the output can be read and re-formatted
-  }).output();
-  const decoder = new TextDecoder();
-  return { ok: result.success, out: decoder.decode(result.stdout), err: decoder.decode(result.stderr) };
+/** Runs a program in the project folder and collects what it prints. */
+export function commandOutput(
+  root: URL,
+  command: string,
+  args: string[],
+): Promise<{ ok: boolean; out: string; err: string }> {
+  return new Promise((done) => {
+    const child = spawn(command, args, {
+      cwd: fileURLToPath(root),
+      env: { ...process.env, NO_COLOR: "1" }, // plain text, so the output can be read and re-formatted
+    });
+    let out = "";
+    let err = "";
+    child.stdout.on("data", (chunk) => (out += chunk));
+    child.stderr.on("data", (chunk) => (err += chunk));
+    child.on("error", (error) => done({ ok: false, out, err: err + error.message }));
+    child.on("close", (code) => done({ ok: code === 0, out, err }));
+  });
+}
+
+// Runs "deno <args>" - the same deno that is running this file.
+function denoOutput(root: URL, args: string[]): Promise<{ ok: boolean; out: string; err: string }> {
+  return commandOutput(root, process.execPath, args);
 }
 
 // Makes file:///full/path/to/project/src/x.ts:3:5 read as src/x.ts:3:5
-function relative(root: URL, text: string): string {
-  return text.replaceAll(root.href, "").replaceAll(decodeURIComponent(root.pathname), "");
+// (and, on Windows, C:\full\path\to\project\src\x.ts as src\x.ts).
+export function relative(root: URL, text: string): string {
+  return text.replaceAll(root.href, "").replaceAll(decodeURIComponent(root.pathname), "")
+    .replaceAll(fileURLToPath(root), "");
 }
 
 // Deno runs each @example code block in a doc comment as a test of its own, named after the file and the
@@ -87,8 +119,12 @@ function docStartLine(file: string): number | undefined {
   return match ? Number(match[1]) : undefined;
 }
 
-/** Type checks src/ and tests/, including the code examples in doc comments. */
-export async function typeCheck(root: URL): Promise<CheckResult> {
+/** Type checks src/ and tests/ (with Deno, the code examples in doc comments too). */
+export function typeCheck(root: URL): Promise<CheckResult> {
+  return RUNTIME === "Deno" ? denoTypeCheck(root) : tscTypeCheck(root);
+}
+
+async function denoTypeCheck(root: URL): Promise<CheckResult> {
   const { ok, err } = await denoOutput(root, ["check", "--quiet", "--doc", "src/", "tests/"]);
   const raw = relative(root, err).replace(/\nerror: Type checking failed\.\s*$/, "").trim();
   const errors: Problem[] = [];
@@ -114,8 +150,29 @@ export async function typeCheck(root: URL): Promise<CheckResult> {
   return { ok, errors, text: mapDocLocations(raw) };
 }
 
-/** Lints src/ and tests/ with Deno's recommended rules. */
+// Node has no type checker of its own: the TypeScript compiler, tsc, is installed by "npm install".
+// It checks the files tsconfig.json lists (src/ and tests/), and reports each error on one line:
+//   src/greeting.ts(3,7): error TS2322: Type 'string' is not assignable to type 'number'.
+async function tscTypeCheck(root: URL): Promise<CheckResult> {
+  let tsc: string;
+  try {
+    tsc = createRequire(new URL("package.json", root)).resolve("typescript/bin/tsc");
+  } catch {
+    const text = 'The TypeScript compiler is not installed - type "npm install" in the console, then build again.';
+    return { ok: false, errors: [{ file: "package.json", line: 1, col: 1, code: "npm install", message: text }], text };
+  }
+  const { ok, out, err } = await commandOutput(root, process.execPath, [tsc, "--noEmit", "--pretty", "false"]);
+  const raw = relative(root, out + err).trim();
+  const errors: Problem[] = [];
+  for (const m of raw.matchAll(/^(.+?)\((\d+),(\d+)\): error (TS\d+): (.*(?:\n {2,}.*)*)/gm)) {
+    errors.push({ file: m[1], line: Number(m[2]), col: Number(m[3]), code: m[4], message: m[5].replace(/\n\s+/g, " ") });
+  }
+  return { ok, errors, text: raw };
+}
+
+/** Lints src/ and tests/ with Deno's recommended rules. (Node has no linter: no warnings.) */
 export async function lint(root: URL): Promise<Problem[]> {
+  if (RUNTIME !== "Deno") return [];
   const { out } = await denoOutput(root, ["lint", "--json", "src/", "tests/"]);
   try {
     const json = JSON.parse(out) as {
@@ -146,7 +203,7 @@ export async function lint(root: URL): Promise<Problem[]> {
 
 // Keeps the useful part of a failure message: drops stack lines from inside Deno or @std,
 // and makes paths relative to the project.
-function cleanMessage(root: URL, message: string): string {
+export function cleanMessage(root: URL, message: string): string {
   return mapDocLocations(relative(root, message))
     .split("\n")
     .filter((line) => !/^\s*at .*(ext:|jsr\.io|deno:)/.test(line) && !/^\s+at (innerWrapped|exitSanitizer)/.test(line))
@@ -212,7 +269,7 @@ function count(results: TestResult[], status: Status): number {
 // Writing the report
 // ---------------------------------------------------------------------------------------------
 
-const useColour = Deno.stdout.isTerminal() && !Deno.env.get("NO_COLOR");
+const useColour = process.stdout.isTTY === true && !process.env.NO_COLOR;
 const green = (s: string) => useColour ? `\x1b[32m${s}\x1b[0m` : s;
 const red = (s: string) => useColour ? `\x1b[31m${s}\x1b[0m` : s;
 const yellow = (s: string) => useColour ? `\x1b[33m${s}\x1b[0m` : s;
@@ -281,7 +338,9 @@ export function toMarkdown(r: Report): string {
   md.push("| Passed | Failed | Skipped | Type errors | Lint warnings |");
   md.push("|---:|---:|---:|---:|---:|");
   md.push(
-    `| ${r.counts.passed} | ${r.counts.failed} | ${r.counts.skipped} | ${r.typeErrors.length} | ${r.lintWarnings.length} |`,
+    `| ${r.counts.passed} | ${r.counts.failed} | ${r.counts.skipped} | ${r.typeErrors.length} | ${
+      r.lintRun ? r.lintWarnings.length : "not run"
+    } |`,
   );
   md.push("");
 
@@ -349,8 +408,8 @@ export function toHtml(r: Report): string {
   const state = r.runError || r.counts.failed > 0 ? "bad" : r.counts.passed === 0 ? "none" : "good";
   const icon = { pass: "✓", fail: "✗", skip: "○" };
 
-  const tile = (n: number, label: string, kind: string) =>
-    `<div class="tile ${n > 0 ? kind : ""}"><b>${n}</b><span>${label}</span></div>`;
+  const tile = (n: number | string, label: string, kind: string) =>
+    `<div class="tile ${typeof n === "number" && n > 0 ? kind : ""}"><b>${n}</b><span>${label}</span></div>`;
 
   const failed = failures(r.tests).map((f) => `
     <article class="failure">
@@ -428,7 +487,7 @@ export function toHtml(r: Report): string {
     ${tile(r.counts.failed, "failed", "bad")}
     ${tile(r.counts.skipped, "skipped", "warn")}
     ${tile(r.typeErrors.length, "type errors", "bad")}
-    ${tile(r.lintWarnings.length, "lint warnings", "warn")}
+    ${r.lintRun ? tile(r.lintWarnings.length, "lint warnings", "warn") : tile("-", "lint (Deno only)", "")}
   </div>
   ${r.runError ? `<section><h2>The tests could not run</h2><pre>${escapeHtml(r.runError)}</pre></section>` : ""}
   ${failed ? `<section><h2>Failing tests</h2>${failed}</section>` : ""}
@@ -444,7 +503,7 @@ export function toHtml(r: Report): string {
   }
   <section><h2>All tests</h2>${all || "<p><em>No tests found in tests/.</em></p>"}</section>
   <section><details><summary>TAP output</summary><pre>${escapeHtml(toTap(r.tests))}</pre></details></section>
-  <footer>Made by tools/test_report.ts &middot; Markdown version: summary.md</footer>
+  <footer>Made by tools/test_report.ts with ${escapeHtml(r.runtime)} &middot; Markdown version: summary.md</footer>
 </main>
 </body>
 </html>
@@ -458,16 +517,65 @@ export function toHtml(r: Report): string {
 /** Runs everything, prints the TAP and a one-line summary, and writes test_output/. */
 export async function runTests(root: URL, check?: CheckResult): Promise<Report> {
   const outDir = new URL("./test_output/", root);
-  await Deno.mkdir(outDir, { recursive: true });
+  await mkdir(outDir, { recursive: true });
+  const lintRun = RUNTIME === "Deno";
 
-  // --no-check: a test that refers to something not written yet still runs (and fails), instead of
-  // stopping every test. Type errors are reported separately, by typeCheck().
-  const [test, checked, lintWarnings] = await Promise.all([
-    // --doc: the @example code blocks in src/'s doc comments run as tests too
-    denoOutput(root, ["test", "--no-check", "--doc", "--reporter=tap", "--permit-no-files", "src/", "tests/"]),
+  // With Node, tools/node_tests.ts runs the tests and gives back the same results.
+  const run = RUNTIME === "Deno"
+    ? denoTests(root)
+    : runNodeTests(root, cleanMessage);
+  const [{ tests, runError }, checked, lintWarnings] = await Promise.all([
+    run,
     check ? Promise.resolve(check) : typeCheck(root),
     lint(root),
   ]);
+
+  const project = decodeURIComponent(root.pathname).split("/").filter(Boolean).pop() ?? "project";
+  const report: Report = {
+    when: new Date().toLocaleString(),
+    project,
+    tests,
+    runError,
+    typeErrors: checked.errors,
+    lintWarnings,
+    lintRun,
+    runtime: `${RUNTIME} ${RUNTIME === "Deno" ? process.versions.deno : process.versions.node}`,
+    counts: { passed: count(tests, "pass"), failed: count(tests, "fail"), skipped: count(tests, "skip") },
+  };
+
+  await Promise.all([
+    writeFile(new URL("tap.txt", outDir), toTap(tests) + "\n"),
+    writeFile(new URL("summary.md", outDir), toMarkdown(report)),
+    writeFile(new URL("index.html", outDir), toHtml(report)),
+    writeFile(new URL("results.json", outDir), JSON.stringify(report, null, 2)),
+  ]);
+
+  // The console: TAP, then one line that says how things stand.
+  console.log("");
+  if (runError) console.log(red(runError));
+  else if (tests.length > 0) console.log(toTap(tests, useColour));
+  const { passed, failed, skipped } = report.counts;
+  const parts = [
+    failed > 0 || runError ? red(`${failed} failed`) : green(`${failed} failed`),
+    green(`${passed} passed`),
+    skipped > 0 ? yellow(`${skipped} skipped`) : `${skipped} skipped`,
+    checked.errors.length > 0 ? red(`${checked.errors.length} type errors`) : "0 type errors",
+    !lintRun ? "lint not run (Deno only)" : lintWarnings.length > 0 ? yellow(`${lintWarnings.length} lint warnings`) : "0 lint warnings",
+  ];
+  const summary = runError ? red("the tests could not run (see above)") : parts.join(", ");
+  console.log(`\nTests: ${summary}  ->  test_output/index.html`);
+  return report;
+}
+
+/** Runs the tests with deno test, and reads its TAP output. */
+async function denoTests(root: URL): Promise<{ tests: TestResult[]; runError?: string }> {
+  // --no-check: a test that refers to something not written yet still runs (and fails), instead of
+  // stopping every test. Type errors are reported separately, by typeCheck().
+  // --doc: the @example code blocks in src/'s doc comments run as tests too
+  const test = await denoOutput(
+    root,
+    ["test", "--no-check", "--doc", "--reporter=tap", "--permit-no-files", "src/", "tests/"],
+  );
 
   const files: string[] = [];
   const tests = parseTap(root, test.out, files);
@@ -495,47 +603,14 @@ export async function runTests(root: URL, check?: CheckResult): Promise<Report> 
   const runError = !test.ok && tests.length === 0 && test.err.trim() !== ""
     ? relative(root, test.err).trim()
     : undefined;
-
-  const project = decodeURIComponent(root.pathname).split("/").filter(Boolean).pop() ?? "project";
-  const report: Report = {
-    when: new Date().toLocaleString(),
-    project,
-    tests,
-    runError,
-    typeErrors: checked.errors,
-    lintWarnings,
-    counts: { passed: count(tests, "pass"), failed: count(tests, "fail"), skipped: count(tests, "skip") },
-  };
-
-  await Promise.all([
-    Deno.writeTextFile(new URL("tap.txt", outDir), toTap(tests) + "\n"),
-    Deno.writeTextFile(new URL("summary.md", outDir), toMarkdown(report)),
-    Deno.writeTextFile(new URL("index.html", outDir), toHtml(report)),
-    Deno.writeTextFile(new URL("results.json", outDir), JSON.stringify(report, null, 2)),
-  ]);
-
-  // The console: TAP, then one line that says how things stand.
-  console.log("");
-  if (runError) console.log(red(runError));
-  else if (tests.length > 0) console.log(toTap(tests, useColour));
-  const { passed, failed, skipped } = report.counts;
-  const parts = [
-    failed > 0 || runError ? red(`${failed} failed`) : green(`${failed} failed`),
-    green(`${passed} passed`),
-    skipped > 0 ? yellow(`${skipped} skipped`) : `${skipped} skipped`,
-    checked.errors.length > 0 ? red(`${checked.errors.length} type errors`) : "0 type errors",
-    lintWarnings.length > 0 ? yellow(`${lintWarnings.length} lint warnings`) : "0 lint warnings",
-  ];
-  const summary = runError ? red("the tests could not run (see above)") : parts.join(", ");
-  console.log(`\nTests: ${summary}  ->  test_output/index.html`);
-  return report;
+  return { tests, runError };
 }
 
-// "deno task test" runs this file on its own.
+// "deno task test" and "npm test" run this file on its own.
 if (import.meta.main) {
   const root = new URL("../", import.meta.url);
   const check = await typeCheck(root);
   if (check.text) console.log(check.text);
   const report = await runTests(root, check);
-  Deno.exit(report.counts.failed > 0 || report.runError ? 1 : 0);
+  process.exit(report.counts.failed > 0 || report.runError ? 1 : 0);
 }

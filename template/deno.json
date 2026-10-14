@@ -7,8 +7,10 @@
     "lint": "deno lint src/ tests/"
   },
   "imports": {
-    "@std/assert": "jsr:@std/assert@^1"
+    "@std/assert": "jsr:@std/assert@^1",
+    "esbuild": "npm:esbuild@^0.25.0"
   },
+  "nodeModulesDir": "auto",
   "compilerOptions": {
     "lib": [
       "dom",

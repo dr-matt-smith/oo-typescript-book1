@@ -21,6 +21,21 @@ watcher is running, press **Ctrl+C** first to stop it.
 
 No server is needed: `dist/` is a plain web page, so you can also open `dist/index.html` in any browser.
 
+### No Deno? Use Node
+
+The project works with **Node** (version 26 or later) too - for example on the college lab PCs. If the
+console says it cannot find `deno`, use its Node buttons instead:
+
+1. **`npm install`** - once, the first time: downloads the build tools into `node_modules/` (this needs
+   an internet connection)
+2. **`npm run dev`** - the same as `deno task dev`: build, test, and watch
+
+Everything else is the same: the same `dist/`, the same tests and the same test report. Only Deno has a
+linter, so with Node the report shows "lint (Deno only)".
+
+Every command, for each: [README_deno_TS_workflow.md](README_deno_TS_workflow.md) and
+[README_node_TS_workflow.md](README_node_TS_workflow.md).
+
 ## What to look at
 
 - `src/planets.json` - the data, as JSON

@@ -7,7 +7,7 @@
 // Paths are relative to book1/. The folder must not exist yet. The project is built once, so dist/
 // and test_output/ exist when it is first opened.
 
-import { join, resolve } from "jsr:@std/path@^1";
+import { basename, join, resolve } from "jsr:@std/path@^1";
 import { BOOK, build, copyProject } from "./project_files.ts";
 
 const [folderArg, title, summary = "PROJECT_SUMMARY"] = Deno.args;
@@ -31,5 +31,11 @@ for (const file of ["README.md", "public/index.html"]) {
     ),
   );
 }
+// npm needs each project to have a name of its own: lower case, with no underscores.
+const npmPath = join(folder, "package.json");
+const npm = JSON.parse(await Deno.readTextFile(npmPath));
+npm.name = basename(folder).toLowerCase().replaceAll("_", "-");
+await Deno.writeTextFile(npmPath, JSON.stringify(npm, null, 2) + "\n");
+
 await build(folder);
 console.log(`Made ${folderArg}`);

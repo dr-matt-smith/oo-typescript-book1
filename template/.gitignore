@@ -3,3 +3,4 @@ test_output/
 .celbridge/
 .DS_Store
 coverage/
+node_modules/

@@ -1,0 +1,17 @@
+{
+  "name": "ch01-project04-age-groups",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch-path=src --watch-path=public --watch-path=tests build.ts --watching",
+    "build": "node build.ts",
+    "test": "node tools/test_report.ts",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@std/assert": "npm:@jsr/std__assert@^1.0.0",
+    "esbuild": "^0.25.0",
+    "typescript": "^5.9.0"
+  }
+}

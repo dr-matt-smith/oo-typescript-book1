@@ -5,11 +5,16 @@
 //   4. removes anything in dist/ that no longer comes from public/
 //   5. runs every test in tests/ and writes a readable report to test_output/
 //
-// Run once:                         deno task build
-// Rebuild and retest on every save: deno task dev   (terminal.console starts this for you)
+// Works with both Deno and Node:
+//   Run once:                         deno task build   OR   npm run build
+//   Rebuild and retest on every save: deno task dev     OR   npm run dev    (terminal.console starts deno task dev)
 //
 // You never need to edit this file.
 
+import { copyFile, mkdir, readdir, rm, stat } from "node:fs/promises";
+import { fileURLToPath } from "node:url";
+import process from "node:process";
+import * as esbuild from "esbuild";
 import { runTests, typeCheck } from "./tools/test_report.ts";
 
 const ROOT_DIR = new URL("./", import.meta.url);
@@ -21,24 +26,7 @@ console.log(`\n=== Build started at ${new Date().toLocaleTimeString()} ===`);
 
 // dist/ is updated in place (not deleted and recreated), so a preview that has dist/index.html open
 // keeps working across rebuilds. Old files are cleaned up at the end instead (step 4).
-await Deno.mkdir(DIST_DIR, { recursive: true });
-
-// Runs "deno <args>" in the project folder, and waits for it to finish.
-// When `quiet` is true the output is only shown if the command fails.
-async function deno(args: string[], quiet = false): Promise<boolean> {
-  const result = await new Deno.Command(Deno.execPath(), {
-    args,
-    cwd: ROOT_DIR,
-    stdout: quiet ? "piped" : "inherit",
-    stderr: quiet ? "piped" : "inherit",
-  }).output();
-
-  if (quiet && !result.success) {
-    await Deno.stdout.write(result.stdout);
-    await Deno.stderr.write(result.stderr);
-  }
-  return result.success;
-}
+await mkdir(DIST_DIR, { recursive: true });
 
 // 1. Type check (bundling only strips the types, it doesn't check them).
 //    Errors are reported, but the page is still built so you can keep experimenting.
@@ -49,26 +37,32 @@ if (!checked.ok) {
 }
 
 // 2. Bundle src/main.ts, and every file it imports, into dist/app.js.
-//    --format=iife makes a plain <script>, so dist/index.html works opened straight from the disk.
-const bundled = await deno(
-  ["bundle", "--quiet", "--platform=browser", "--format=iife", "--output=dist/app.js", "src/main.ts"],
-  true,
-);
-if (bundled) {
+//    format "iife" makes a plain <script>, so dist/index.html works opened straight from the disk.
+try {
+  await esbuild.build({
+    absWorkingDir: fileURLToPath(ROOT_DIR),
+    entryPoints: ["src/main.ts"],
+    bundle: true,
+    platform: "browser",
+    format: "iife",
+    outfile: "dist/app.js",
+    logLevel: "error",
+  });
   console.log("Built dist/app.js from src/main.ts (and the files it imports)");
-} else {
+} catch {
   console.log("The page could not be built (see above)");
 }
+await esbuild.stop(); // esbuild runs as a helper program: stop it, so this script can finish
 
 // 3. Copy every file under public/ (HTML, CSS, images, ...) as-is.
 let copied = 0;
 async function copyFolder(from: URL, to: URL): Promise<void> {
-  await Deno.mkdir(to, { recursive: true });
-  for await (const entry of Deno.readDir(from)) {
-    if (entry.isDirectory) {
+  await mkdir(to, { recursive: true });
+  for (const entry of await readdir(from, { withFileTypes: true })) {
+    if (entry.isDirectory()) {
       await copyFolder(new URL(entry.name + "/", from), new URL(entry.name + "/", to));
     } else if (entry.name !== ".DS_Store" && !entry.name.endsWith(".cel")) { // .cel = Celbridge editor settings
-      await Deno.copyFile(new URL(entry.name, from), new URL(entry.name, to));
+      await copyFile(new URL(entry.name, from), new URL(entry.name, to));
       copied++;
     }
   }
@@ -78,14 +72,14 @@ console.log(`Copied ${copied} file(s) from public/ to dist/`);
 
 // 4. Remove anything in dist/ that no longer comes from public/ (e.g. a deleted image).
 async function removeOldFiles(dist: URL, from: URL, prefix = ""): Promise<void> {
-  for await (const entry of Deno.readDir(dist)) {
+  for (const entry of await readdir(dist, { withFileTypes: true })) {
     if (prefix + entry.name === "app.js" || entry.name === ".DS_Store") continue;
-    const name = entry.name + (entry.isDirectory ? "/" : "");
-    const inPublic = await Deno.stat(new URL(name, from)).then(() => true, () => false);
+    const name = entry.name + (entry.isDirectory() ? "/" : "");
+    const inPublic = await stat(new URL(name, from)).then(() => true, () => false);
     if (!inPublic) {
-      await Deno.remove(new URL(name, dist), { recursive: true });
+      await rm(new URL(name, dist), { recursive: true, force: true });
       console.log(`Removed dist/${prefix}${name} (no longer in public/)`);
-    } else if (entry.isDirectory) {
+    } else if (entry.isDirectory()) {
       await removeOldFiles(new URL(name, dist), new URL(name, from), prefix + name);
     }
   }
@@ -98,7 +92,7 @@ console.log(`dist/ is up to date (${builtIn}s) - press refresh on the dist/index
 // 5. Test, and write test_output/index.html + test_output/summary.md.
 await runTests(ROOT_DIR, checked);
 
-// "deno task dev" passes --watching (Deno restarts this script whenever a watched file changes).
-if (Deno.args.includes("--watching")) {
+// "deno task dev" and "npm run dev" pass --watching (they restart this script whenever a watched file changes).
+if (process.argv.includes("--watching")) {
   console.log("\nWatching src/, public/ and tests/ - save a file to rebuild and retest (Ctrl+C to stop)");
 }
