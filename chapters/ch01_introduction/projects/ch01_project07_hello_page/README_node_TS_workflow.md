@@ -57,7 +57,10 @@ To see the page, open `dist/index.html` - in Celbridge's preview (press its refr
 rebuild), or in any web browser. No server is needed.
 
 The tests are written for Deno (`Deno.test(...)`), and the book explains them that way. With Node they
-run unchanged: `tools/deno_test_for_node.ts` hands each one to Node's own test runner.
+run unchanged: `tools/deno_test_for_node.ts` hands each one to Node's own test runner. Each test file
+is compiled to JavaScript by esbuild first (into `test_output/node_tests/`), because Node can only run
+TypeScript whose types can simply be deleted - not, for example, a parameter property like
+`constructor(private name: string)`.
 
 
 ## The other commands

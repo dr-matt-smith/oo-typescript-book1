@@ -4,10 +4,15 @@
 //   - the tests in tests/ are written with Deno.test(...): tools/deno_test_for_node.ts lets Node run them
 //   - Node cannot run the @example code blocks in doc comments, as Deno does, so each one is written out
 //     as a small test file of its own, in test_output/doc_examples/, and run like the others
+//   - Node can only run TypeScript that becomes JavaScript by deleting the types. Some TypeScript needs more
+//     than that - a parameter property, constructor(private name: string), or an enum - so each test file
+//     is first compiled to JavaScript by esbuild (into test_output/node_tests/), with a source map, so that
+//     errors still point at the lines of your own files
 //
 // You never need to edit this file.
 
 import { run } from "node:test";
+import * as esbuild from "esbuild";
 import { mkdir, readdir, readFile, rm, writeFile } from "node:fs/promises";
 import { dirname, join, relative as relativePath, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
@@ -29,7 +34,8 @@ const TEST_FILE = /(^|[._])test\.[jt]sx?$/;
 async function filesUnder(root: string, folder: string): Promise<string[]> {
   const found: string[] = [];
   const entries = await readdir(join(root, folder), { withFileTypes: true }).catch(() => []);
-  for (const entry of entries.sort((a, b) => a.name.localeCompare(b.name))) {
+  // Sorted the way Deno sorts them: by character code, so capital letters come first.
+  for (const entry of entries.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))) {
     const path = `${folder}/${entry.name}`;
     if (entry.isDirectory()) found.push(...await filesUnder(root, path));
     else found.push(path);
@@ -143,15 +149,50 @@ interface NodeError {
   cause?: NodeError | string;
 }
 
-/** The first place in the stack that is in the project's own files: "tests/x.test.ts:21:3". */
-function firstProjectFrame(root: string, stack: string): { at: string; file: string; line: number } | undefined {
+/** The places in the stack that are in the project's own files: "src/Pet.ts:17:36", "tests/x.test.ts:9:3". */
+function projectFrames(root: string, stack: string): { at: string; line: number }[] {
+  const frames: { at: string; line: number }[] = [];
   for (const m of stack.matchAll(/\(?(file:\/\/\S+?|\/\S+?|[A-Za-z]:\\\S+?):(\d+):(\d+)\)?$/gm)) {
     const path = m[1].startsWith("file:") ? fileURLToPath(m[1]) : m[1];
     const file = relativePath(root, path).split(sep).join("/");
     if (file.startsWith("..") || file.startsWith("node_modules/") || file.startsWith("tools/")) continue;
-    return { at: `${file}:${m[2]}:${m[3]}`, file, line: Number(m[2]) };
+    if (file.startsWith("test_output/")) continue; // a doc example: reported by its lines instead
+    frames.push({ at: `${file}:${m[2]}:${m[3]}`, line: Number(m[2]) });
   }
-  return undefined;
+  return frames;
+}
+
+/** Compiles a test file (and what it imports from the project) into one JavaScript file Node can run. */
+async function compile(root: string, testFile: TestFile, clean: Clean, rootUrl: URL): Promise<string | TestResult> {
+  const out = join(root, "test_output", "node_tests", relativePath(root, testFile.path) + ".mjs");
+  try {
+    await esbuild.build({
+      absWorkingDir: root,
+      entryPoints: [testFile.path],
+      outfile: out,
+      bundle: true,
+      packages: "external", // @std/assert and the like are loaded from node_modules/ as they are
+      platform: "node",
+      format: "esm",
+      sourcemap: "inline",
+      logLevel: "silent",
+    });
+    return out;
+  } catch (error) {
+    // It could not be compiled, e.g. it imports a file, or a name, that does not exist yet.
+    const errors = (error as { errors?: esbuild.Message[] }).errors ?? [];
+    const message = errors.length
+      ? errors.map((e) => `${e.text}${e.location ? `\n    at ${e.location.file}:${e.location.line}:${e.location.column + 1}` : ""}`)
+        .join("\n")
+      : String(error);
+    return {
+      name: "(this test file could not run)",
+      file: testFile.shownAs,
+      status: "fail",
+      message: clean(rootUrl, message),
+      steps: [],
+    };
+  }
 }
 
 /** Runs one test file in Node, and turns what happened into results (tests, and their steps). */
@@ -167,7 +208,12 @@ async function runFile(rootUrl: URL, root: string, testFile: TestFile, clean: Cl
     return index < 0 ? undefined : index + 1;
   };
 
-  for await (const event of run({ files: [testFile.path], cwd: root, execArgv: ["--import", shim] })) {
+  const compiled = await compile(root, testFile, clean, rootUrl);
+  if (typeof compiled !== "string") return [compiled];
+
+  // --enable-source-maps: errors are reported at the lines of the .ts files, not of the compiled file.
+  const execArgv = ["--enable-source-maps", "--import", shim];
+  for await (const event of run({ files: [compiled], cwd: root, execArgv })) {
     if (event.type === "test:stderr") stderr += event.data.message;
     if (event.type !== "test:pass" && event.type !== "test:fail") continue;
 
@@ -180,7 +226,7 @@ async function runFile(rootUrl: URL, root: string, testFile: TestFile, clean: Cl
     if (event.type === "test:fail") {
       const error = data.details.error as NodeError;
       const cause = typeof error.cause === "object" ? error.cause : undefined;
-      if (data.name === testFile.path) {
+      if (data.name === compiled) {
         // The file itself could not run, e.g. it imports something that does not exist yet.
         result.name = "(this test file could not run)";
         const why = stderr.match(/^(\w*Error\b.*?: [\s\S]*?)(?=\n\s+at |\n\n|$)/m)?.[1] ?? stderr;
@@ -193,13 +239,12 @@ async function runFile(rootUrl: URL, root: string, testFile: TestFile, clean: Cl
         result.line = declaredAt(data.name);
       } else if (cause?.stack) {
         // The error as Deno shows it: the error and its message, then where in your code it happened.
-        const frame = firstProjectFrame(root, cause.stack);
+        const frames = projectFrames(root, cause.stack);
         const text = cause.stack.split(/\n\s+at /)[0];
-        const at = testFile.example
-          ? `${testFile.shownAs} (example at lines ${testFile.example.start}-${testFile.example.end})`
-          : frame?.at;
-        result.message = clean(rootUrl, at ? `${text}\n    at ${at}` : text);
-        result.line = testFile.example ? testFile.example.start : declaredAt(data.name) ?? frame?.line;
+        const at = frames.map((frame) => frame.at);
+        if (testFile.example) at.push(`${testFile.shownAs} (example at lines ${testFile.example.start}-${testFile.example.end})`);
+        result.message = clean(rootUrl, [text, ...at.map((place) => `    at ${place}`)].join("\n"));
+        result.line = testFile.example ? testFile.example.start : declaredAt(data.name) ?? frames.at(-1)?.line;
       } else {
         result.message = clean(rootUrl, String(cause ?? error.message ?? "failed"));
       }
@@ -217,10 +262,13 @@ export async function runNodeTests(rootUrl: URL, clean: Clean): Promise<{ tests:
     const testFiles: TestFile[] = (await filesUnder(root, "tests"))
       .filter((file) => TEST_FILE.test(file.split("/").pop() ?? ""))
       .map((file) => ({ path: join(root, file), shownAs: file }));
+    await rm(join(root, "test_output", "node_tests"), { recursive: true, force: true });
     const files = [...testFiles, ...await writeDocExamples(root)];
     const results = await Promise.all(files.map((file) => runFile(rootUrl, root, file, clean)));
     return { tests: results.flat() };
   } catch (error) {
     return { tests: [], runError: clean(rootUrl, String(error instanceof Error ? error.stack : error)) };
+  } finally {
+    await esbuild.stop(); // esbuild runs as a helper program: stop it, so the build can finish
   }
 }
